@@ -1,0 +1,19 @@
+{
+   "time":86400,
+   "ABMLayer":{
+      "active":true,
+      "ABMmode":"mode",
+      "zoomLevel":12
+   },
+   "AggregatedTripsLayer":{
+      "active":true,
+      "ABMmode":"mode"
+   },
+   "GridLayer":{
+      "active":true
+   },
+   "AccessLayer":{
+      "active":true,
+      "accessToggle":0
+   }
+}

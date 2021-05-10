@@ -20,15 +20,17 @@ void ofApp::setup() {
 
 	ofBackground(0);
 	ofSetFrameRate(60);
-
-	ofFile file("test_web.json");
-	if (file.exists()) {
-		file >> js;
-		toSend = js.dump();
+	cout << "loaded json configurations" << std::endl;
+	for (int i = 0; i < 4; i++) {
+		std::string jsonFile = "site_0"+to_string(i)+".json";
+		ofFile file(jsonFile);
+		if (file.exists()) {
+			cout << "loadead: " << jsonFile << std::endl;
+			file >> js;
+			sendJson[i] = js.dump();
+		}
 	}
 	cout << "Port" << PORT_WEB << std::endl;
-	cout << "JSON read:" << std::endl;
-	cout << toSend << std::endl;
 
 	//Serial communication
 
@@ -48,6 +50,8 @@ void ofApp::setup() {
 	}
 
 	buttonRect = ofRectangle(400, 50, 50, 50);
+
+	memset(serialInput, 0, 4);
 }
 
 //--------------------------------------------------------------
@@ -114,9 +118,9 @@ void ofApp::draw() {
 	if (messages.size() > NUM_MESSAGES) messages.erase(messages.begin());
 
 	ofSetColor(150, 0, 0);
-	ofDrawBitmapString("Type a message, hit [RETURN] to send:", x, ofGetHeight() - 60);
-	ofSetColor(255);
-	ofDrawBitmapString(toSend, x, ofGetHeight() - 40);
+	ofDrawBitmapString("Type a message, hit [RETURN] to send ", x, ofGetHeight() - 60);
+	//ofSetColor(255);
+	//ofDrawBitmapString(toSend, x, ofGetHeight() - 40);
 }
 
 //--------------------------------------------------------------
@@ -156,7 +160,7 @@ void ofApp::onMessage(ofxLibwebsockets::Event& args) {
 
 
 	// echo server = send message right back!
-	args.conn.send(toSend);
+	//args.conn.send(toSend);
 }
 
 //--------------------------------------------------------------
@@ -167,6 +171,7 @@ void ofApp::onBroadcast(ofxLibwebsockets::Event& args) {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 	// do some typing!
+	/*
 	if (key != OF_KEY_RETURN) {
 		if (key == OF_KEY_BACKSPACE) {
 			if (toSend.length() > 0) {
@@ -178,10 +183,25 @@ void ofApp::keyPressed(int key) {
 		}
 	}
 	else {
-		// send to all clients
+		 send to all clients
 		server.send(toSend);
 		messages.push_back("Sent: '" + toSend + "' to " + ofToString(server.getConnections().size()) + " websockets");
 		toSend = "";
+	}
+	*/
+
+	if (key == '1') {
+		server.send(sendJson[0]);
+	}
+	if (key == '2') {
+		server.send(sendJson[1]);
+	}
+
+	if (key == '3') {
+		server.send(sendJson[2]);
+	}
+	if (key == '4') {
+		server.send(sendJson[3]);
 	}
 }
 

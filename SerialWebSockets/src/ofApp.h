@@ -34,7 +34,7 @@ public:
 	vector<string> messages;
 
 	//string to send to clients
-	string toSend;
+	string sendJson[4]; 
 
 	ofJson js;
 
